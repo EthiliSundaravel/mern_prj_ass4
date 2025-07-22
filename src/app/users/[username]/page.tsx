@@ -1,4 +1,10 @@
-const UserProfile = async ({ params }: { params: { username: string } }) => {
+export const dynamic = "force-dynamic";
+
+type Props = {
+  params: { username: string }
+};
+
+export default async function UserProfile({ params }: Props) {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
       <section className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center">
@@ -17,6 +23,4 @@ const UserProfile = async ({ params }: { params: { username: string } }) => {
       </section>
     </main>
   );
-};
-
-export default UserProfile;
+}
