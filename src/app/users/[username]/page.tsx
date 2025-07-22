@@ -1,11 +1,8 @@
-// ✅ No need to import custom PageProps or Metadata if unused
-interface Props {
-  params: {
-    username: string;
-  };
+interface PageProps {
+  params: { username: string };
 }
 
-export default function Page({ params }: Props) {
+export default function Page({ params }: PageProps) {
   const { username } = params;
 
   return (
