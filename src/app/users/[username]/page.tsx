@@ -1,6 +1,7 @@
 interface Props {
   params: { username: string };
 }
+
 export default function UserProfile({ params }: Props) {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -11,7 +12,7 @@ export default function UserProfile({ params }: Props) {
           </span>
         </div>
         <h1 className="text-2xl font-extrabold text-indigo-700 mb-2 text-center">
-          {params.username}'s Profile
+          {`${params.username}'s Profile`}
         </h1>
         <p className="text-gray-600 text-center">
           Welcome to the profile of{" "}
