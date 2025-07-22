@@ -1,12 +1,12 @@
 import { Metadata } from "next";
 
-type PageProps = {
+interface Props {
   params: {
     username: string;
   };
-};
+}
 
-export default function UserProfilePage({ params }: PageProps) {
+export default function Page({ params }: Props) {
   const { username } = params;
 
   return (
