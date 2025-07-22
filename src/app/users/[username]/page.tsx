@@ -1,5 +1,4 @@
-import { Metadata } from "next";
-
+// ✅ No need to import custom PageProps or Metadata if unused
 interface Props {
   params: {
     username: string;
