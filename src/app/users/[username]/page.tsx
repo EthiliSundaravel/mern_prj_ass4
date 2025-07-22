@@ -1,12 +1,6 @@
-import { FC } from "react";
+import { type PageProps } from "next"; // Import Next.js type
 
-interface PageProps {
-  params: {
-    username: string;
-  };
-}
-
-const UserProfile = async ({ params }: PageProps) => {
+const UserProfile = async ({ params }: { params: { username: string } }) => {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
       <section className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center">
