@@ -16,7 +16,7 @@ export default function UserProfile({ params }: Props) {
           </span>
         </div>
         <h1 className="text-2xl font-extrabold text-indigo-700 mb-2 text-center">
-          {username}'s Profile
+          {username}&rsquo;s Profile
         </h1>
         <p className="text-gray-600 text-center">
           Welcome to the profile of{" "}
