@@ -1,8 +1,12 @@
-interface Props {
-  params: { username: string };
-}
+'use client';
 
-export default function UserProfile({ params }: Props) {
+import React from 'react';
+
+export default function UserProfile({
+  params,
+}: {
+  params: { username: string };
+}) {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
       <section className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center">
