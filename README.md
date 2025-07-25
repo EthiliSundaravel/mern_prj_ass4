@@ -1,37 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📈 Stock Market Predictor
 
-## Getting Started
+A modern full-stack web application that uses a neural network (via Brain.js) to predict stock prices based on historical data. Built with **Next.js 15**, **Tailwind CSS**, **Chart.js**, and vanilla **JavaScript**.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Features
+
+- Upload or generate stock price data
+- Train a neural network model in the browser
+- Predict the next 5 days of prices
+- View predictions on an interactive chart
+- Responsive, clean UI with Tailwind CSS
+
+---
+
+## 🧑‍💻 How to Run Locally
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/EthiliSundaravel/mern_prj_ass4
+   cd mern_prj_ass4
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+4. Visit `http://localhost:3000` in your browser.
+
+---
+
+## 📊 Dataset Format & Usage
+
+You can either:
+- Add entries manually using the UI
+- Use the **Generate Sample Data** button to prefill 60 days of stock data
+
+Each entry must follow this structure:
+
+```json
+{
+  "symbol": "AMZN",
+  "date": "2025-07-01",
+  "price": 145.23
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+✅ Minimum **10 entries** are required to enable predictions.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧠 Model Logic
 
-## Learn More
+- Neural network built using [Brain.js](https://brain.js.org/)
+- Architecture:
+  - **Input:** Last 5 days of normalized stock prices
+  - **Output:** Predicted price for the next day
+  - **Hidden Layers:** `[10, 8]`
+- Training:
+  - 2000 iterations
+  - Runs fully in the browser (no backend required)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🧩 Third-Party Libraries Used
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Library        | Purpose                           |
+|----------------|-----------------------------------|
+| `brain.js`     | Neural network model              |
+| `chart.js`     | Visualizing historical/predicted data |
+| `next.js`      | React framework with routing      |
+| `tailwindcss`  | Modern utility-first CSS styling  |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🌐 Deployed Version
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-"# mern_prj_ass4" 
+👉 [Live Demo on Vercel]https://mern-prj-ass4.vercel.app/
+
+---
+
+## 🔐 Demo Credentials
+
+```
+Username: ethiliadmin@gmail.com
+Password: ethili
+```
