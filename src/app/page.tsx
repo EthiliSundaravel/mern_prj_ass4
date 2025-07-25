@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 export default function HomePage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-indigo-100 to-indigo-200">
@@ -33,20 +31,18 @@ export default function HomePage() {
             <span className="font-semibold text-indigo-600">Tailwind CSS</span>.
           </p>
         </div>
-        <div className="flex flex-wrap gap-4 justify-center mt-2">
-          <Link
-            href="/register"
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl shadow-lg transition text-lg"
-          >
-            Get Started
-          </Link>
-          <Link
-            href="/about"
-            className="bg-white border border-indigo-200 hover:bg-indigo-50 text-indigo-700 font-semibold px-8 py-3 rounded-xl shadow-lg transition text-lg"
-          >
-            Learn More
-          </Link>
+
+        {/* 🔐 Static Username & Password */}
+        <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl shadow-inner w-full max-w-md text-center">
+          <h2 className="text-xl font-semibold text-indigo-700 mb-2">Test Credentials</h2>
+          <p className="text-gray-700 mb-1">
+            <strong>Username:</strong> ethiliadmin@gmail.com
+          </p>
+          <p className="text-gray-700">
+            <strong>Password:</strong> ethili
+          </p>
         </div>
+
         <div className="mt-8 flex flex-col items-center">
           <span className="inline-block bg-indigo-50 text-indigo-700 px-6 py-2 rounded-full text-base font-medium shadow">
             MERN • Next.js • Tailwind CSS

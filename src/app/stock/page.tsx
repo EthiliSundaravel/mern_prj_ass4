@@ -24,7 +24,7 @@ export default function StockPredictorPage() {
     };
 
     // Load dependencies and custom script
-    const brainScript = loadScript('https://cdn.jsdelivr.net/npm/brain.js');
+    const brainScript = loadScript('https://cdn.jsdelivr.net/npm/brain.js@2.0.0-beta.2/dist/brain-browser.min.js');
     const chartScript = loadScript('https://cdn.jsdelivr.net/npm/chart.js');
     const customScript = loadScript('/script.js'); // Must be in public folder
 

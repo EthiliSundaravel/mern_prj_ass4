@@ -10,16 +10,31 @@ export default function RegisterPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      setError(data.error || "Registration failed");
-    } else {
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      let data = null;
+      try {
+        data = await res.json(); // Try parsing only if body exists
+      } catch (jsonErr) {
+        // Ignore JSON parse errors for empty response
+      }
+
+      if (!res.ok) {
+        const message = data?.error || "Registration failed. Try again.";
+        setError(message);
+        return;
+      }
+
       router.push("/login");
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+      console.error("Registration error:", err);
     }
   }
 

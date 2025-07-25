@@ -4,6 +4,7 @@ import { useSession, signOut } from "next-auth/react";
 
 export default function NavBar() {
   const { data: session, status } = useSession();
+
   return (
     <header className="bg-white/80 backdrop-blur shadow-md rounded-b-2xl mb-8">
       <nav className="flex items-center justify-between max-w-5xl mx-auto px-6 py-3">
@@ -21,12 +22,20 @@ export default function NavBar() {
             About
           </Link>
           {session && (
-            <Link
-              href="/dashboard"
-              className="text-indigo-700 font-semibold hover:text-indigo-900 transition-colors px-3 py-1 rounded hover:bg-indigo-50"
-            >
-              Dashboard
-            </Link>
+            <>
+              <Link
+                href="/dashboard"
+                className="text-indigo-700 font-semibold hover:text-indigo-900 transition-colors px-3 py-1 rounded hover:bg-indigo-50"
+              >
+                Dashboard
+              </Link>
+              <Link
+                href="/stock"
+                className="text-indigo-700 font-semibold hover:text-indigo-900 transition-colors px-3 py-1 rounded hover:bg-indigo-50"
+              >
+                AI Stock Predictor
+              </Link>
+            </>
           )}
         </div>
         <div className="flex items-center gap-2 sm:gap-4">

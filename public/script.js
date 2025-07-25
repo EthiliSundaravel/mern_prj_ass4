@@ -1,25 +1,31 @@
-let stockData = [];
-const net = new brain.NeuralNetwork({ hiddenLayers: [10, 8] });
+window.stockData = window.stockData || [];
+let net = null;
 
-// Initialize the application when the page loads
+function initializeNet() {
+  if (typeof brain !== "undefined") {
+    net = new brain.NeuralNetwork({ hiddenLayers: [10, 8] });
+  } else {
+    console.error("❌ brain.js is not loaded yet.");
+  }
+}
+
 function initializeApp() {
+  initializeNet();
   updateList();
-  
-  // Set default date to today
+
   const today = new Date();
   const dateInput = document.getElementById("dateInput");
   if (dateInput) {
     dateInput.value = today.toISOString().split('T')[0];
   }
-  
-  // Add initial state for prediction results
+
   const predictionResults = document.getElementById("predictionResults");
   if (predictionResults) {
     predictionResults.innerHTML = `
       <div style="
-        text-align: center; 
-        padding: 30px 20px; 
-        color: #666; 
+        text-align: center;
+        padding: 30px 20px;
+        color: #666;
         font-size: 16px;
         background: rgba(255, 255, 255, 0.7);
         border-radius: 8px;
@@ -30,12 +36,10 @@ function initializeApp() {
       </div>
     `;
   }
-  
-  // Add chart placeholder
+
   initializeChartPlaceholder();
 }
 
-// Run initialization when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeApp);
 
 function addEntry() {
@@ -47,26 +51,24 @@ function addEntry() {
     alert("⚠️ Please fill in all fields with valid data");
     return;
   }
-  
+
   if (price <= 0) {
     alert("⚠️ Price must be greater than 0");
     return;
   }
-  
-  if (stockData.some(entry => entry.date === date)) {
+
+  if (window.stockData.some(entry => entry.date === date)) {
     alert("⚠️ An entry for this date already exists");
     return;
   }
 
-  stockData.push({ symbol, date, price });
-  stockData.sort((a, b) => new Date(a.date) - new Date(b.date));
+  window.stockData.push({ symbol, date, price });
+  window.stockData.sort((a, b) => new Date(a.date) - new Date(b.date));
   updateList();
-  
-  // Clear inputs after successful addition
+
   document.getElementById("dateInput").value = "";
   document.getElementById("priceInput").value = "";
-  
-  // Show success feedback
+
   const button = document.getElementById("addEntryBtn");
   const originalText = button.innerHTML;
   button.innerHTML = '✅ Added!';
@@ -78,17 +80,17 @@ function addEntry() {
 }
 
 function removeEntry(index) {
-  stockData.splice(index, 1);
+  window.stockData.splice(index, 1);
   updateList();
 }
 
 function updateList() {
   const list = document.getElementById("dataList");
-  if (!list) return; // 🔒 Safeguard
-  
+  if (!list) return;
+
   list.innerHTML = "";
 
-  if (stockData.length === 0) {
+  if (window.stockData.length === 0) {
     list.innerHTML = `
       <div style="text-align: center; padding: 30px 20px; color: #666; font-size: 16px;
         background: rgba(255, 255, 255, 0.7); border-radius: 8px;
@@ -100,7 +102,7 @@ function updateList() {
     return;
   }
 
-  stockData.forEach((entry, i) => {
+  window.stockData.forEach((entry, i) => {
     const div = document.createElement("div");
     div.className = "data-item";
     div.innerHTML = `
@@ -115,27 +117,24 @@ function generateSampleData() {
   const symbol = document.getElementById("symbol").value;
   const base = { AMZN: 150, GOOGL: 140, CRM: 250, MSFT: 390, NVDA: 900 }[symbol];
   const today = new Date();
-  stockData = [];
-  
-  // Show loading state
+  window.stockData = [];
+
   const button = document.getElementById("generateSampleDataBtn");
   const originalText = button.innerHTML;
   button.innerHTML = '🎲 Generating...';
   button.disabled = true;
-  
+
   setTimeout(() => {
     for (let i = 0; i < 60; i++) {
       const d = new Date(today);
       d.setDate(today.getDate() - 60 + i);
-      stockData.push({
+      window.stockData.push({
         symbol,
         date: d.toISOString().split("T")[0],
         price: Math.round((base + Math.sin(i * 0.1) * 10 + (Math.random() - 0.5) * 20) * 100) / 100
       });
     }
     updateList();
-    
-    // Reset button
     button.innerHTML = '✅ Generated!';
     button.style.background = '#4CAF50';
     setTimeout(() => {
@@ -155,17 +154,23 @@ function denormalize(val, min, max) {
 }
 
 function trainAndPredict() {
-  if (stockData.length < 10) return alert("⚠️ Please add at least 10 entries for accurate predictions");
+  if (!net) {
+    alert("⚠️ Neural network not initialized yet. Please refresh the page.");
+    return;
+  }
 
-  // Add loading state
+  if (window.stockData.length < 10) {
+    alert("⚠️ Please add at least 10 entries for accurate predictions");
+    return;
+  }
+
   const button = document.getElementById("trainBtn");
   const originalText = button.innerHTML;
   button.innerHTML = '🧠 Training Neural Network...';
   button.disabled = true;
-  
-  // Add a small delay to show loading state
+
   setTimeout(() => {
-    const prices = stockData.map(d => d.price);
+    const prices = window.stockData.map(d => d.price);
     const min = Math.min(...prices);
     const max = Math.max(...prices);
     const trainingData = [];
@@ -179,18 +184,18 @@ function trainAndPredict() {
     net.train(trainingData, { iterations: 2000 });
 
     const predictionResultsEl = document.getElementById("predictionResults");
-const predictionResults = []; // This is the array now
+    const predictionResults = [];
 
-if (predictionResultsEl) {
-  predictionResultsEl.innerHTML = `
-    <div style="text-align: center; padding: 30px 20px; color: #666; font-size: 16px;
-      background: rgba(255, 255, 255, 0.7); border-radius: 8px;
-      border: 2px dashed #ddd;">
-      🔮 <strong>Prediction Results</strong><br>
-      <small style="color: #999; font-size: 14px;">Processing predictions...</small>
-    </div>
-  `;
-}
+    if (predictionResultsEl) {
+      predictionResultsEl.innerHTML = `
+        <div style="text-align: center; padding: 30px 20px; color: #666; font-size: 16px;
+          background: rgba(255, 255, 255, 0.7); border-radius: 8px;
+          border: 2px dashed #ddd;">
+          🔮 <strong>Prediction Results</strong><br>
+          <small style="color: #999; font-size: 14px;">Processing predictions...</small>
+        </div>
+      `;
+    }
 
     let input = prices.slice(-5).map(p => normalize(p, min, max));
 
@@ -206,8 +211,7 @@ if (predictionResultsEl) {
 
     renderPredictions(predictionResults);
     drawChart(prices, predictionResults.map(p => parseFloat(p.price)));
-    
-    // Reset button
+
     button.innerHTML = originalText;
     button.disabled = false;
   }, 100);
@@ -217,7 +221,7 @@ function renderPredictions(predictions) {
   const div = document.getElementById("predictionResults");
   div.innerHTML = "<h3>🔮 Prediction Results</h3>";
   predictions.forEach((p, i) => {
-    const d = new Date(stockData[stockData.length - 1].date);
+    const d = new Date(window.stockData[window.stockData.length - 1].date);
     d.setDate(d.getDate() + i + 1);
     const confidenceColor = p.confidence > 75 ? '#4CAF50' : p.confidence > 70 ? '#FF9800' : '#FF5722';
     div.innerHTML += `
@@ -232,12 +236,8 @@ function renderPredictions(predictions) {
 function initializeChartPlaceholder() {
   const chartContainer = document.querySelector('.chart-container');
   const canvas = document.getElementById('chart');
-  
   if (chartContainer && canvas) {
-    // Hide the canvas initially
     canvas.style.display = 'none';
-    
-    // Create placeholder
     const placeholder = document.createElement('div');
     placeholder.id = 'chart-placeholder';
     placeholder.innerHTML = `
@@ -259,44 +259,33 @@ function initializeChartPlaceholder() {
         <div style="font-size: 14px; color: #999;">Train the AI model to see historical data and predictions visualized here</div>
       </div>
     `;
-    
     chartContainer.appendChild(placeholder);
   }
 }
 
-// Remove chart placeholder when showing actual chart
 function removeChartPlaceholder() {
   const placeholder = document.getElementById('chart-placeholder');
   const canvas = document.getElementById('chart');
-  
-  if (placeholder) {
-    placeholder.remove();
-  }
-  
-  if (canvas) {
-    canvas.style.display = 'block';
-  }
+  if (placeholder) placeholder.remove();
+  if (canvas) canvas.style.display = 'block';
 }
 
 function drawChart(history, prediction) {
-  // Remove placeholder and show canvas
   removeChartPlaceholder();
-  
   const ctx = document.getElementById("chart").getContext("2d");
-  
-  // Show only last 30 days of historical data to avoid lengthy chart
+
   const maxHistoryPoints = 30;
-  const startIndex = Math.max(0, stockData.length - maxHistoryPoints);
-  const recentStockData = stockData.slice(startIndex);
+  const startIndex = Math.max(0, window.stockData.length - maxHistoryPoints);
+  const recentStockData = window.stockData.slice(startIndex);
   const recentHistory = history.slice(startIndex);
-  
+
   const labels = recentStockData.map(d => {
     const date = new Date(d.date);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   });
-  
+
   const predLabels = [];
-  let last = new Date(stockData[stockData.length - 1].date);
+  let last = new Date(window.stockData[window.stockData.length - 1].date);
   for (let i = 0; i < prediction.length; i++) {
     last.setDate(last.getDate() + 1);
     predLabels.push(last.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
@@ -315,12 +304,7 @@ function drawChart(history, prediction) {
           borderColor: "#4CAF50",
           backgroundColor: "rgba(76, 175, 80, 0.1)",
           tension: 0.4,
-          fill: true,
-          pointBackgroundColor: "#4CAF50",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          pointRadius: 3,
-          pointHoverRadius: 6
+          fill: true
         },
         {
           label: "🔮 AI Predictions",
@@ -329,12 +313,7 @@ function drawChart(history, prediction) {
           backgroundColor: "rgba(255, 107, 107, 0.1)",
           borderDash: [8, 4],
           tension: 0.4,
-          fill: false,
-          pointBackgroundColor: "#FF6B6B",
-          pointBorderColor: "#ffffff",
-          pointBorderWidth: 2,
-          pointRadius: 4,
-          pointHoverRadius: 7
+          fill: false
         }
       ]
     },
@@ -344,86 +323,15 @@ function drawChart(history, prediction) {
       plugins: {
         title: {
           display: true,
-          text: `📈 ${stockData[0]?.symbol || 'Stock'} Price Analysis (Last 30 Days + Predictions)`,
-          font: {
-            size: 18,
-            weight: 'bold'
-          },
-          color: '#333',
-          padding: 20
-        },
-        legend: {
-          display: true,
-          position: 'top',
-          labels: {
-            usePointStyle: true,
-            font: {
-              size: 14
-            },
-            padding: 20
-          }
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: false,
-          title: {
-            display: true,
-            text: 'Price ($)',
-            font: {
-              size: 14,
-              weight: 'bold'
-            }
-          },
-          grid: {
-            color: 'rgba(0, 0, 0, 0.1)',
-            drawBorder: false
-          },
-          ticks: {
-            font: {
-              size: 12
-            },
-            callback: function(value) {
-              return '$' + value.toFixed(2);
-            }
-          }
-        },
-        x: {
-          title: {
-            display: true,
-            text: 'Date',
-            font: {
-              size: 14,
-              weight: 'bold'
-            }
-          },
-          grid: {
-            color: 'rgba(0, 0, 0, 0.1)',
-            drawBorder: false
-          },
-          ticks: {
-            font: {
-              size: 12
-            },
-            maxTicksLimit: 15
-          }
-        }
-      },
-      interaction: {
-        intersect: false,
-        mode: 'index'
-      },
-      elements: {
-        line: {
-          borderWidth: 3
+          text: `📈 ${window.stockData[0]?.symbol || 'Stock'} Price Analysis (Last 30 Days + Predictions)`
         }
       }
     }
   });
 }
 
+// Expose to global scope for use in React
 window.generateSampleData = generateSampleData;
 window.addEntry = addEntry;
 window.trainAndPredict = trainAndPredict;
 window.initializeApp = initializeApp;
-
