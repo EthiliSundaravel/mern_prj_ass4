@@ -36,7 +36,7 @@ export default function HomePage() {
         <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl shadow-inner w-full max-w-md text-center">
           <h2 className="text-xl font-semibold text-indigo-700 mb-2">Test Credentials</h2>
           <p className="text-gray-700 mb-1">
-            <strong>Username:</strong> ethiliadmin@gmail.com
+            <strong>Username:</strong> ethiliadmintemplate@gmail.com
           </p>
           <p className="text-gray-700">
             <strong>Password:</strong> ethili
